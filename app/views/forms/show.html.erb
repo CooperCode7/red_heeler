@@ -2,7 +2,22 @@
 
 <p><%= @form.description %></p>
 
+<h2>Questions</h2>
+<ul>
+    <% @form.questions.each do |question| %>
+        <li><%= question.content %></li>
+        &nbsp;
+        <%= link_to "Edit", edit_form_question_path(@form, question) %>
+        
+        <%= link_to "Delete", form_question_path(@form, question), method: :delete, data: {confirm: "Are you sure?" } %>
+        </li>
+    <% end %>
+</ul>
+
+<%= link_to "Add a Question", new_form_question_path(@form) %>
+
 <p><strong>Created by:</strong> <%= @form.user.email %></p>
 
 <%= link_to "Edit", edit_form_path(@form) %> |
+<%= link_to "Delete Form", form_path(@form), method: :delete, data: { confirm: "Are you sure?" } %> |
 <%= link_to "Back to All Forms", forms_path %>

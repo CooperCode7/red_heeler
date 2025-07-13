@@ -1,28 +1,46 @@
 require "test_helper"
 
 class QuestionsControllerTest < ActionDispatch::IntegrationTest
-  test "should get new" do
-    get questions_new_url
-    assert_response :success
+  setup do
+    @user = User.create!(email: "test@example.com")
+    @form = Form.create!(title: "Test Form", user: @user)
   end
 
-  test "should get create" do
-    get questions_create_url
-    assert_response :success
+  test "should create question" do
+    assert_difference("Question.count", 1) do
+      post form_questions_path(@form), params: {
+        question: { content: "What is your name?" }
+      }
+    end
+
+    assert_redirected_to form_path(@form)
+  end
+
+  test "should not create question with blank content" do
+    assert_no_difference("Question.count") do
+      post form_questions_path(@form), params: {
+        question: { content: "" }
+      }
+    end
+
+    assert_response :unprocessable_entity
+    decoded_body = CGI.unescapeHTML(response.body)
+    assert_match(/can't be blank/, decoded_body)
+  end
+
+  test "should delete question" do
+    question = @form.questions.create!(content: "Delete me")
+
+    assert_difference("Question.count", -1) do
+      delete form_question_path(@form, question)
+    end
+
+    assert_redirected_to form_path(@form)
   end
 
   test "should get edit" do
-    get questions_edit_url
-    assert_response :success
-  end
-
-  test "should get update" do
-    get questions_update_url
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get questions_destroy_url
+    question = @form.questions.create!(content: "Edit me")
+    get edit_form_question_path(@form, question)
     assert_response :success
   end
 end

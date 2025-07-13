@@ -1,38 +1,59 @@
 require "test_helper"
 
 class FormsControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get forms_index_url
-    assert_response :success
+  setup do
+    @user = User.create!(email: "test@example.com")
+    @form = Form.create!(title: "Sample Form", user: @user)
   end
 
-  test "should get show" do
-    get forms_show_url
+  test "should get index" do
+    get forms_url
     assert_response :success
+    assert_select "h1", "All Forms"
+  end
+
+  test "should show form" do
+    get form_url(@form)
+    assert_response :success
+    assert_select "h1", @form.title
   end
 
   test "should get new" do
-    get forms_new_url
+    get new_form_url
     assert_response :success
   end
 
-  test "should get create" do
-    get forms_create_url
-    assert_response :success
+  test "should create form" do
+    assert_difference("Form.count", 1) do
+      post forms_url, params: { form: { title: "New Form", user_id: @user.id } }
+    end
+    assert_redirected_to form_path(Form.last)
+  end
+
+  test "should not create form without title" do
+    assert_no_difference("Form.count") do
+      post forms_url, params: { form: { title: "", user_id: @user.id } }
+    end
+    assert_response :unprocessable_entity
+    assert_select "div#error_explanation"
   end
 
   test "should get edit" do
-    get forms_edit_url
+    get edit_form_url(@form)
     assert_response :success
   end
 
-  test "should get update" do
-    get forms_update_url
-    assert_response :success
+  test "should update form" do
+    patch form_url(@form), params: { form: { title: "Updated Title" } }
+    assert_redirected_to form_path(@form)
+    @form.reload
+    assert_equal "Updated Title", @form.title
   end
 
-  test "should get destroy" do
-    get forms_destroy_url
-    assert_response :success
+  test "should destroy form" do
+    assert_difference("Form.count", -1) do
+      delete form_url(@form)
+    end
+    assert_redirected_to forms_url
   end
 end

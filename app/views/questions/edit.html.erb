@@ -1,2 +1,14 @@
-<h1>Questions#edit</h1>
-<p>Find me in app/views/questions/edit.html.erb</p>
+<h1>Edit Question</h1>
+
+<%= form_with model: [@form, @question] do |f| %>
+    <div>
+        <%= f.label :content %><br>
+        <%= f.text_field :content %>
+    </div>
+
+    <div>
+        <%= f.submit "Update Question" %>
+    </div>
+<% end %>
+
+<%= link_to "Back to Form", form_path(@form) %>

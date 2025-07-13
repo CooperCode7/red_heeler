@@ -5,6 +5,7 @@ class FormsController < ApplicationController
 
   def show
     @form = Form.find(params[:id])
+    @questions = @form.questions
   end
 
   def new
@@ -25,12 +26,22 @@ class FormsController < ApplicationController
   end
 
   def edit
+    @form = Form.find(params[:id])
   end
 
   def update
+    @form = Form.find(params[:id])
+    if @form.update(form_params)
+      redirect_to @form, notice: "Form was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
+    @form = Form.find(params[:id])
+    @form.destroy
+    redirect_to forms_path, notice: "Form deleted."
   end
 end
 

@@ -1,2 +1,4 @@
-<h1>Forms#edit</h1>
-<p>Find me in app/views/forms/edit.html.erb</p>
+<h1>Edit Form</h1>
+<%= render 'form', form: @form %>
+
+<%= link_to 'Back', form_path(@form) %>
