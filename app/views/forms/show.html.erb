@@ -1,0 +1,8 @@
+<h1><%= @form.title %></h1>
+
+<p><%= @form.description %></p>
+
+<p><strong>Created by:</strong> <%= @form.user.email %></p>
+
+<%= link_to "Edit", edit_form_path(@form) %> |
+<%= link_to "Back to All Forms", forms_path %>

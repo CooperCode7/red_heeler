@@ -1,0 +1,12 @@
+<h1>All Forms</h1>
+
+<%= link_to 'New Form', new_form_path, class: "button" %>
+
+<ul>
+    <% @forms.each do |form| %>
+        <li>
+            <%= link_to form.title, form_path(form) %>
+            <!-- This links to the show page for the form -->
+        </li>
+    <% end %>
+</ul>
