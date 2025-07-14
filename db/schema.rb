@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_14_001605) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_14_004337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_001605) do
     t.index ["form_id"], name: "index_questions_on_form_id"
   end
 
+  create_table "responses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "form_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id"], name: "index_responses_on_form_id"
+    t.index ["user_id"], name: "index_responses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
@@ -61,4 +70,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_001605) do
   add_foreign_key "answers", "users"
   add_foreign_key "forms", "users"
   add_foreign_key "questions", "forms"
+  add_foreign_key "responses", "forms"
+  add_foreign_key "responses", "users"
 end
